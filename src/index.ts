@@ -11,6 +11,8 @@ const { TOKEN } = require("dotenv").config().parsed;
         intents: IntentOptions
     });
 
+    client.user?.setStatus("idle")
+
     await connectDatabase();
 
     client.on("ready", async () => await onReady(client));

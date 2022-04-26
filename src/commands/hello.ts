@@ -7,5 +7,5 @@ export const hello: Command = {
         .setDescription("Say hello to the bot"),
     run: async (interaction) => {
         interaction.reply(`Hello there <@${interaction.user.id}>!`);
-    }
-}
+    },
+};
