@@ -91,18 +91,21 @@ export const math: Command = {
 
                 interaction.reply(`**\`${a}\` + \`${b}\` = \`${a + b}\`**`);
                 break;
+            
             case "sub":
                 const a2 = interaction.options.getNumber("a", true);
                 const b2 = interaction.options.getNumber("b", true);
 
                 interaction.reply(`**\`${a2}\` - \`${b2}\` = \`${a2 - b2}\`**`);
                 break;
+            
             case "mult":
                 const a3 = interaction.options.getNumber("a", true);
                 const b3 = interaction.options.getNumber("b", true);
 
                 interaction.reply(`**\`${a3}\` x \`${b3}\` = \`${a3 * b3}\`**`);
                 break;
+            
             case "div":
                 const a4 = interaction.options.getNumber("a", true);
                 const b4 = interaction.options.getNumber("b", true);
