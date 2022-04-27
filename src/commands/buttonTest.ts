@@ -45,8 +45,6 @@ export const button: Command = {
         collector?.on("collect", async (i) => {
             await interaction.editReply(`You clicked button ${i.customId}!`);
             await i.deferUpdate();
-
-            console.log("Button clicked!");
         });
     },
 };

@@ -1,6 +1,6 @@
 import { Command } from "../interfaces/Command";
 import { button } from "./buttonTest";
 import { hello } from "./hello";
-import { sum } from "./sum";
+import { math } from "./math";
 
-export const CommandList: Command[] = [hello, sum, button];
+export const CommandList: Command[] = [hello, button, math];
