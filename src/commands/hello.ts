@@ -6,6 +6,6 @@ export const hello: Command = {
         .setName("hello")
         .setDescription("Say hello to the bot"),
     run: async (interaction) => {
-        interaction.reply(`Hello there <@${interaction.user.id}>!`);
+        interaction.editReply(`Hello there <@${interaction.user.id}>!`);
     },
 };

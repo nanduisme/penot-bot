@@ -35,7 +35,7 @@ export const button: Command = {
             ],
         };
 
-        await interaction.reply(message);
+        await interaction.editReply(message);
 
         const collector = interaction.channel?.createMessageComponentCollector({
             filter: (msg) => msg.user.id === interaction.user.id,
