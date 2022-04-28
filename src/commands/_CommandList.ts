@@ -1,7 +1,6 @@
 import { Command } from "../interfaces/Command";
-import { button } from "./buttonTest";
-import { hello } from "./hello";
 import { math } from "./math";
+import { ping } from "./ping";
 import { rps } from "./rockPaperScissors";
 
-export const CommandList: Command[] = [hello, button, math, rps];
+export const CommandList: Command[] = [math, rps, ping];
