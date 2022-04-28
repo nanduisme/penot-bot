@@ -8,6 +8,8 @@ export const button: Command = {
         .setDescription("Click a button please!"),
 
     run: async (interaction) => {
+        await interaction.deferReply();
+
         const message = {
             content: "Click a button!",
             components: [
@@ -42,9 +44,43 @@ export const button: Command = {
             time: 15000,
         });
 
+        let count = 0;
+        let collectorStopped = false;
+
         collector?.on("collect", async (i) => {
-            await interaction.editReply(`You clicked button ${i.customId}!`);
+            await interaction.editReply(
+                `You clicked button ${i.customId}! Count: ${++count}`
+            );
             await i.deferUpdate();
+
+            if (count === 3) {
+                collector?.stop();
+                disableButtons(message);
+                await interaction.editReply({content: "You clicked 3 times!", components: message.components});
+                collectorStopped = true;
+            }
+        });
+
+        collector?.on("end", async (i) => {
+            if (!collectorStopped) { 
+                return
+            }
+
+            disableButtons(message);
+
+            await interaction.editReply({
+                content: `You clicked ${count} times! Times up!`,
+                components: message.components,
+            });
         });
     },
 };
+
+function disableButtons(message: { content: string; components: MessageActionRow[]; }) {
+    for (const row of message.components) {
+        for (const button of row.components) {
+            button.setDisabled(true);
+        }
+    }
+}
+
