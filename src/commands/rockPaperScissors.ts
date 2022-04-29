@@ -4,19 +4,20 @@ import {
 } from "@discordjs/builders";
 import {
     ColorResolvable,
-    CommandInteraction,
     MessageActionRow,
     MessageButton,
     MessageComponentInteraction,
     MessageEmbed,
 } from "discord.js";
 import { Command } from "../interfaces/Command";
+import { getUserData } from "../modules/getUserData";
 import {
     botChoice,
     rpsIntTotString,
     rpsLogic,
     rpsStringToInt,
 } from "../modules/rpsLogic";
+import { setGame } from "../modules/setUserData";
 
 export const rps: Command = {
     data: new SlashCommandBuilder()
@@ -33,6 +34,17 @@ export const rps: Command = {
     run: async (interaction) => {
         await interaction.deferReply();
 
+        // Check if user is already in a game
+        const userData = await getUserData(interaction.user.id);
+        if (userData.isInGame) {
+            await interaction.editReply(
+                `You are already in a game (${userData.currentGame})! Use \`/leavegames\` to leave your current game.`
+            );
+            return;
+        } else {
+            setGame(interaction.user.id, "rps");
+        }
+
         // Get the number of rounds to play
         let points = interaction.options.getInteger("points", false);
         if (!points) {
@@ -43,7 +55,6 @@ export const rps: Command = {
         let botScore = 0;
 
         let prompt = "Rock, paper, or scissors?";
-        let currentRound = 1;
 
         const gameMessage = {
             embeds: [
@@ -94,16 +105,23 @@ export const rps: Command = {
         let timedout = false;
         let timeoutMessageSent = false;
 
-        const play = (): boolean | undefined => {
-            if (playerScore >= (points as number) || botScore >= (points as number) || timedout) {
+        const play = async (): Promise<boolean | undefined> => {
+            if (
+                playerScore >= (points as number) ||
+                botScore >= (points as number) ||
+                timedout
+            ) {
                 return true;
             }
 
             // Send game embed
-            interaction.editReply(gameMessage);
+            await interaction.editReply(gameMessage);
             const interactionFilter = (i: MessageComponentInteraction) => {
                 i.deferUpdate();
-                return i.user.id === interaction.user.id;
+                return (
+                    i.user.id === interaction.user.id &&
+                    getUserData(i.user.id).then((user) => user.isInGame)
+                );
             };
 
             interaction.channel
@@ -134,7 +152,7 @@ export const rps: Command = {
                 .catch(() => {
                     timedout = true;
                 })
-                .finally(() => {
+                .finally(async () => {
                     if (timedout && !timeoutMessageSent) {
                         const timeoutMessage = {
                             embeds: [
@@ -148,12 +166,17 @@ export const rps: Command = {
                             components: [],
                         };
 
-                        interaction.editReply(timeoutMessage);
+                        await interaction.editReply(timeoutMessage);
                         timeoutMessageSent = true;
+                        setGame(interaction.user.id, "null");
                         return;
                     }
 
-                    if (play()) {
+                    if (
+                        await play()
+                            .then((res) => res)
+                            .catch(() => false)
+                    ) {
                         // Send the final game embed
                         let embedColor = "#7C5ADD";
                         let embedTitle = "It was a tie!";
@@ -178,11 +201,12 @@ export const rps: Command = {
                         };
 
                         interaction.editReply(finalMessage);
+                        setGame(interaction.user.id, "null");
                         return;
                     }
                 });
         };
 
-        play();
+        await play();
     },
 };

@@ -5,7 +5,8 @@ export const getUserData = async (id: string): Promise<UserInt> => {
         await UserModel.findOne({ id }) ||
         await UserModel.create({
             discordId: id,
-            messageCount: 0
+            isInGame: false,
+            currentGame: "null",
         });
 
     return userData;
