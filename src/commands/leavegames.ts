@@ -13,7 +13,7 @@ export const leavegames: Command = {
         await interaction.deferReply();
 
         const userData = await getUserData(interaction.user.id);
-        if (!userData.isInGame) {
+        if (!userData.isInGame()) {
             await interaction.editReply(`You are not in a game!`);
             return;
         } else {

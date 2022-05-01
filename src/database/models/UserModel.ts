@@ -2,14 +2,20 @@ import { Document, model, Schema } from "mongoose"
 
 export interface UserInt extends Document {
     discordId: string;
-    isInGame: boolean;
-    currentGame: "rps"|"null";
+    currentGame: "rps" | "null" | "xo";
+    isInGame(): boolean;
 }
 
 export const User = new Schema({
     discordId: String,
-    isInGame: Boolean,
-    currentGame: String,
+    currentGame: {
+        type: String,
+        default: "null",
+    },
 })
 
-export default model<UserInt>("user", User)
+User.methods.isInGame = function (): boolean { 
+    return this.currentGame !== "null";
+}
+
+export default model("user", User)

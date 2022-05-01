@@ -31,20 +31,8 @@ export const rps: Command = {
                 .setMinValue(1)
                 .setMaxValue(20)
         ),
+    isGame: true,
     run: async (interaction) => {
-        await interaction.deferReply();
-
-        // Check if user is already in a game
-        const userData = await getUserData(interaction.user.id);
-        if (userData.isInGame) {
-            await interaction.editReply(
-                `You are already in a game (${userData.currentGame})! Use \`/leavegames\` to leave your current game.`
-            );
-            return;
-        } else {
-            setGame(interaction.user.id, "rps");
-        }
-
         // Get the number of rounds to play
         let points = interaction.options.getInteger("points", false);
         if (!points) {
@@ -120,7 +108,7 @@ export const rps: Command = {
                 i.deferUpdate();
                 return (
                     i.user.id === interaction.user.id &&
-                    getUserData(i.user.id).then((user) => user.isInGame)
+                    getUserData(i.user.id).then((user) => user.isInGame())
                 );
             };
 
