@@ -22,4 +22,3 @@ export default async (client: Client) => {
 
     console.log(`Logged in to Discord!`);
 }
-
