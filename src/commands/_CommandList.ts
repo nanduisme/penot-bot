@@ -1,5 +1,6 @@
 import { Command } from "../interfaces/Command";
 import { leavegames } from "./leavegames";
+import { lubbastats } from "./lubbastats";
 import { math } from "./math";
 import { ping } from "./ping";
 import { rps } from "./rockPaperScissors";
@@ -11,4 +12,5 @@ export const CommandList: Command[] = [
     ping, 
     leavegames, 
     xo,
+    lubbastats
 ];
