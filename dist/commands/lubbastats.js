@@ -18,13 +18,14 @@ exports.lubbastats = {
         .setDescription("Get stats of time lubbas been sett <3"),
     run: (interaction) => __awaiter(void 0, void 0, void 0, function* () {
         yield interaction.deferReply();
-        let settDate = new Date(Date.parse("2020-09-09"));
-        let yearsSinceSett = Math.floor((Date.now() - settDate.getTime()) / (1000 * 60 * 60 * 24 * 365));
-        let monthsSinceSett = Math.floor((Date.now() - settDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
-        let daysSinceSett = Math.floor((Date.now() - settDate.getTime()) / (1000 * 60 * 60 * 24));
-        let hoursSinceSett = Math.floor((Date.now() - settDate.getTime()) / (1000 * 60 * 60));
-        let minutesSinceSett = Math.floor((Date.now() - settDate.getTime()) / (1000 * 60));
-        let secondsSinceSett = Math.floor((Date.now() - settDate.getTime()) / 1000);
+        const settDate = new Date(Date.parse("2020-09-09"));
+        const dateDiff = Date.now() - settDate.getTime();
+        const secondsSinceSett = Math.floor(dateDiff / 1000);
+        const minutesSinceSett = Math.floor(secondsSinceSett / 60);
+        const hoursSinceSett = Math.floor(minutesSinceSett / 60);
+        const daysSinceSett = Math.floor(hoursSinceSett / 24);
+        const monthsSinceSett = Math.floor(daysSinceSett / 30);
+        const yearsSinceSett = Math.floor(daysSinceSett / 365);
         yield interaction.editReply({
             embeds: [
                 new discord_js_1.MessageEmbed()
@@ -37,27 +38,27 @@ exports.lubbastats = {
                         inline: true,
                     },
                     {
-                        name: "or Months",
+                        name: "Months",
                         value: `\`${monthsSinceSett}\``,
                         inline: true,
                     },
                     {
-                        name: "or Days",
+                        name: "Days",
                         value: `\`${daysSinceSett}\``,
                         inline: true,
                     },
                     {
-                        name: "or Hours",
+                        name: "Hours",
                         value: `\`${hoursSinceSett}\``,
                         inline: true,
                     },
                     {
-                        name: "or Minutes",
+                        name: "Minutes",
                         value: `\`${minutesSinceSett}\``,
                         inline: true,
                     },
                     {
-                        name: "or Seconds",
+                        name: "Seconds",
                         value: `\`${secondsSinceSett}\``,
                         inline: true,
                     },
